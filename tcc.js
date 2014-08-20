@@ -17,6 +17,7 @@ console de logs
 
 */
 
+var UNEXPECTED_VALUE_PARM = "TCC: Unexpected value for the parameter %X. See the documentation";
 
 /*
 	@access public
@@ -39,7 +40,7 @@ function TCC(parms) {
 		if (typeof parms.beforeStart == 'function') { 
 			
 		} else {
-			
+			throw UNEXPECTED_VALUE_PARM.replace("%X", "beforeStart");
 		}
 		
 	}
