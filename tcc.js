@@ -4,14 +4,14 @@ trabalho futuro:
 só da play se tiver logado
 play conforme dispositivo
 play se aceitar termos
-play depois de x segundos
 play baseado em return true de função
 BANDA
 limite de execução
 bateria
 por % de processamento
 a cada x tarefas espera x segundos
-
+inatividade do mouse
+inatividade do teclado
 console de logs
 
 ver mais sobre a variavel state (linha 1792)
@@ -22,7 +22,7 @@ a função loop da linha 2320 que faz os alert no console, ver depois
 var UNEXPECTED_VALUE_PARM = "TCC: Unexpected value for the parameter %X. See the documentation";
 var WEEK_DAYS = ['sun', 'mon', 'tue', 'wed', 'Thu', 'fri', 'sat'];
 
-var times;
+var times, timeToStart;
 
 /*
 	@access public
@@ -42,6 +42,7 @@ function TCC(parms) {
 
 	//inicializacao
 	this.times = [];
+	this.timeToStart = 0;
 
 	if(parms.beforeStart != null) {
 		if (typeof parms.beforeStart == 'function') {
@@ -82,6 +83,11 @@ function TCC(parms) {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "startIfTime");
 		}
 	}
+	if(parms.timeToStart != null) {
+
+		this.timeToStart = this.formatTimeToStart(parms.timeToStart);
+		
+	}
 	if(parms.autoStart != null) {
 		if (typeof parms.autoStart == 'boolean') {
 			
@@ -93,6 +99,7 @@ function TCC(parms) {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "autoStart");
 		}
 	}
+	
 }
 /*
 	@name beforeStart
@@ -131,7 +138,15 @@ TCC.prototype.afterStart = function() {
 TCC.prototype.start = function() {
 	if(this.verifyTime()) {
 		this.beforeStart();
-		QM.start();
+		
+		if(this.timeToStart > 0) {
+			setTimeout(function() {
+				QM.start();
+			}, this.timeToStart);
+		} else {
+			QM.start();
+		}
+
 		this.afterStart();
 	}
 };
@@ -230,4 +245,28 @@ TCC.prototype.verifyTime = function() {
 	} else {
 		return true;
 	}
+};
+
+TCC.prototype.formatTimeToStart = function(time_param) {
+
+	if(typeof time_param == 'string') {
+
+		var unit = time_param.substr(time_param.length - 1, 1);
+		if(unit == 's' || unit == 'm') {
+			time_param = time_param.replace(unit, '');
+		}
+
+		if(unit == 's') {
+			time_param = parseInt(time_param) * 1000;
+		} else if(unit == 'm') {
+			time_param = parseInt(time_param) * 1000 * 1000;
+		} else {
+			time_param = parseInt(time_param);
+		}
+
+	} else {
+		time_param = parseInt(time_param);
+	}
+
+	return time_param;
 };
