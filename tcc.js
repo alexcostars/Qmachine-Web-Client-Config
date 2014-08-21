@@ -1,9 +1,7 @@
 /*
 trabalho futuro:
-por horário
-dia da semana
+
 só da play se tiver logado
-play automático
 play conforme dispositivo
 play se aceitar termos
 play depois de x segundos
@@ -16,12 +14,15 @@ a cada x tarefas espera x segundos
 
 console de logs
 
+ver mais sobre a variavel state (linha 1792)
+a função loop da linha 2320 que faz os alert no console, ver depois 
+
 */
 
 var UNEXPECTED_VALUE_PARM = "TCC: Unexpected value for the parameter %X. See the documentation";
 var WEEK_DAYS = ['sun', 'mon', 'tue', 'wed', 'Thu', 'fri', 'sat'];
 
-var times = [];
+var times;
 
 /*
 	@access public
@@ -39,6 +40,9 @@ var times = [];
 */
 function TCC(parms) {
 
+	//inicializacao
+	this.times = [];
+
 	if(parms.beforeStart != null) {
 		if (typeof parms.beforeStart == 'function') {
 			this.beforeStart = parms.beforeStart;
@@ -47,7 +51,7 @@ function TCC(parms) {
 		}
 	}
 	if(parms.afterStart != null) {
-		if (typeof parms.afterStart == 'function') { 
+		if (typeof parms.afterStart == 'function') {
 			TCC.afterStart = parms.afterStart;
 		} else {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "afterStart");
@@ -76,6 +80,17 @@ function TCC(parms) {
 
 		} else {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "startIfTime");
+		}
+	}
+	if(parms.autoStart != null) {
+		if (typeof parms.autoStart == 'boolean') {
+			
+			if(parms.autoStart) {
+				this.start();
+			}
+
+		} else {
+			throw UNEXPECTED_VALUE_PARM.replace("%X", "autoStart");
 		}
 	}
 }
