@@ -19,3 +19,87 @@ E construa um objeto do tipo TCC
 	});
 </script>
 ```
+## beforeStart
+Descrição: Execute uma função antes do processo de colaboração ser iniciado
+
+Value type: function
+
+``` javascript
+tcc = new TCC({
+  	beforeStart: function() {
+  		alert('Process will start');
+  	}
+});
+```
+## afterStart
+Descrição: Execute uma função após o processo de colaboração ser iniciado
+
+Value type: function
+
+``` javascript
+tcc = new TCC({
+  	afterStart: function() {
+  		alert('Process began');
+  	}
+});
+```
+
+## beforeStop
+Descrição: Execute uma função antes do processo de colaboração ser interrompido
+
+Value type: function
+
+``` javascript
+tcc = new TCC({
+  	beforeStop: function() {
+  		alert('Process will be stopped');
+  	}
+});
+```
+
+## afterStop
+Descrição: Execute uma função após do processo de colaboração ser interrompido
+
+Value type: function
+
+``` javascript
+tcc = new TCC({
+  	afterStop: function() {
+  		alert('Process stopped');
+  	}
+});
+```
+## startIfTime
+Descrição: Defina em que dias/horas o processo de colaboração poderá ser iniciado
+
+Value type: string
+
+Input example:
+
+``` javascript
+tcc = new TCC({
+	//here we was defined the colaboration process will starter
+	//Mon: all Mon days
+	//Thu(8-15): all Thu days, only in interval from 8 A.M. to 15 P.M.
+	//Sat: all Sat days, only in 8 A.M.
+	//Sun(22-5): all Sun days, only in interval from 22 P.M. to 23:59 P.M. and 00:01 A.M. to 5 P.M.
+  	startIfTime: 'Mon, Thu(8-15), Sat(8-8), Sun(22-5)'
+});
+```
+## timeToStart
+Descrição: Defina um período de tempo que deve ser aguardado antes de iniciar o processo de colaboração
+
+Value type: string or numeric
+
+Input example:
+
+``` javascript
+tcc = new TCC({
+	//you can set any formats, here we use 2 to example:
+	//'2m': whaiting 2 minutes
+	//'2s': whaiting 2 seconds
+	//'2': whaiting 2 miliseconds
+	//2: whaiting 2 miliseconds
+  	timeToStart: '2m'
+});
+```
