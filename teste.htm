@@ -1,0 +1,32 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="https://www.qmachine.org/qm.js"></script>
+  <script src="tcc.js"></script>
+</head>
+<body>
+ 
+<p id="play">play</p>
+<p id="stop">stop</p>
+ 
+<script>
+	var tcc;
+
+	$( document ).ready(function() {
+	    tcc = new TCC({
+	  		timeToStart: '10s',
+	  		autoStart: true
+	  	});
+	});
+
+	$( "#play" ).click(function() {
+	  	tcc.start();
+	});
+	$( "#stop" ).click(function() {
+	  	QM.stop();
+	});
+</script>
+ 
+</body>
+</html>
