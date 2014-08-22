@@ -20,6 +20,7 @@ a função loop da linha 2320 que faz os alert no console, ver depois
 */
 
 var UNEXPECTED_VALUE_PARM = "TCC: Unexpected value for the parameter %X. See the documentation";
+var QMACHINE_IS_MISSING = "Qmachine is missing";
 var WEEK_DAYS = ['sun', 'mon', 'tue', 'wed', 'Thu', 'fri', 'sat'];
 
 var times, timeToStart;
@@ -43,6 +44,11 @@ function TCC(parms) {
 	//inicializacao
 	this.times = [];
 	this.timeToStart = 0;
+	
+	if (window.hasOwnProperty('QM') === false) {
+     		throw QMACHINE_IS_MISSING;
+     		return;
+    	}
 
 	if(parms.beforeStart != null) {
 		if (typeof parms.beforeStart == 'function') {
