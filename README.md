@@ -78,7 +78,7 @@ Input example:
 
 ``` javascript
 tcc = new TCC({
-	//here we was defined the colaboration process will starter
+	//here we defined when the colaboration process will start
 	//Mon: all Mon days
 	//Thu(8-15): all Thu days, only in interval from 8 A.M. to 15 P.M.
 	//Sat: all Sat days, only in 8 A.M.
@@ -95,7 +95,7 @@ Input example:
 
 ``` javascript
 tcc = new TCC({
-	//you can set any formats, here we use 2 to example:
+	//you can set any formats, here we use the number 2 for example:
 	//'2m': whaiting 2 minutes
 	//'2s': whaiting 2 seconds
 	//'2': whaiting 2 miliseconds
