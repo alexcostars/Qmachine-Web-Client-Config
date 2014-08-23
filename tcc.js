@@ -18,11 +18,8 @@ a função loop da linha 2320 que faz os alert no console, ver depois
 
 */
 
-var UNEXPECTED_VALUE_PARM = "TCC: Unexpected value for the parameter %X. See the documentation";
-var QMACHINE_IS_MISSING = "Qmachine is missing";
-var WEEK_DAYS = ['sun', 'mon', 'tue', 'wed', 'Thu', 'fri', 'sat'];
 
-var times, timeToStart, notRunDevices, deviceInformation;
+
 
 /*
 	@access public
@@ -38,18 +35,34 @@ var times, timeToStart, notRunDevices, deviceInformation;
 /*
 @constructs
 */
-function TCC(parms) {
+
+
+
+function QmachineWebClientConfig() {
+
+	var UNEXPECTED_VALUE_PARM = "TCC: Unexpected value for the parameter %X. See the documentation";
+	var QMACHINE_IS_MISSING = "Qmachine is missing";
+	var WEEK_DAYS = ['sun', 'mon', 'tue', 'wed', 'Thu', 'fri', 'sat'];
+	var times, timeToStart, notRunDevices, deviceInformation, mouseStationaryListener, state;
+	 
 
 	//inicializacao
 	this.times = [];
 	this.timeToStart = 0;
 	this.notRunDevices = '';
-	deviceInformation = null;
+	this.deviceInformation = null;
+	this.mouseStationaryListener = null;
+	this.state = false;
+
+}
+
+QmachineWebClientConfig.prototype.config = function(parms) {
+	
 	
 	if (window.hasOwnProperty('QM') === false) {
-     		throw QMACHINE_IS_MISSING;
-     		return;
-    	}
+ 		throw QMACHINE_IS_MISSING;
+ 		return;
+    }
 
 	if(parms.beforeStart != null) {
 		if (typeof parms.beforeStart == 'function') {
@@ -105,9 +118,28 @@ function TCC(parms) {
 		}
 	}
 	if(parms.timeToStart != null) {
-
-		this.timeToStart = this.formatTimeToStart(parms.timeToStart);
+		this.timeToStart = this.stringToTime(parms.timeToStart);
+	}
+	if(parms.startAsMouseIsStationary != null) {
 		
+		if(typeof parms.startAsMouseIsStationary == 'object') { 
+
+			var element, time;
+			
+			if (typeof parms.startAsMouseIsStationary[0] == 'string' && (typeof parms.startAsMouseIsStationary[1] == 'number' || typeof parms.startAsMouseIsStationary[1] == 'string')) {
+				element = parms.startAsMouseIsStationary[0];
+				time = this.stringToTime(parms.startAsMouseIsStationary[1]);
+			} else {
+				throw UNEXPECTED_VALUE_PARM.replace("%X", "startAsMouseIsStationary");
+			}
+		} else if (typeof parms.startAsMouseIsStationary == 'number' || typeof parms.startAsMouseIsStationary == 'string') {
+			element = '*';
+			time = this.stringToTime(parms.startAsMouseIsStationary);
+		} else {
+			throw UNEXPECTED_VALUE_PARM.replace("%X", "startAsMouseIsStationary");
+		}
+
+		this.configMouseStationaryListener(element, time);
 	}
 	if(parms.autoStart != null) {
 		if (typeof parms.autoStart == 'boolean') {
@@ -120,8 +152,7 @@ function TCC(parms) {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "autoStart");
 		}
 	}
-	
-}
+};
 /*
 	@name beforeStart
 	@description Define um evento a ser executado antes de iniciar o processo de colaboração
@@ -135,7 +166,7 @@ function TCC(parms) {
 	  		//code here
 	  	}
 */
-TCC.prototype.beforeStart = function() {
+QmachineWebClientConfig.prototype.beforeStart = function() {
 	
 };
 
@@ -152,23 +183,28 @@ TCC.prototype.beforeStart = function() {
 	  		//code here
 	  	}
 */
-TCC.prototype.afterStart = function() {
+QmachineWebClientConfig.prototype.afterStart = function() {
 	
 };
 
-TCC.prototype.start = function() {
-	if(this.verifyTime()) {
-		this.beforeStart();
-		if(this.verifyDevice()) {
-		
-			if(this.timeToStart > 0) {
-				setTimeout(function() {
+QmachineWebClientConfig.prototype.start = function() {
+
+	if(TCC.state === false) {
+		if(this.verifyTime()) {
+			this.beforeStart();
+			if(this.verifyDevice()) {
+			
+				if(this.timeToStart > 0) {
+					setTimeout(function() {
+						QM.start();
+						TCC.state = true;
+						TCC.afterStart();
+					}, TCC.timeToStart);
+				} else {
 					QM.start();
+					TCC.state = true;
 					this.afterStart();
-				}, this.timeToStart);
-			} else {
-				QM.start();
-				this.afterStart();
+				}
 			}
 		}
 	}
@@ -187,7 +223,7 @@ TCC.prototype.start = function() {
 	  		//code here
 	  	}
 */
-TCC.prototype.beforeStop = function() {
+QmachineWebClientConfig.prototype.beforeStop = function() {
 	
 };
 
@@ -204,17 +240,20 @@ TCC.prototype.beforeStop = function() {
 	  		//code here
 	  	}
 */
-TCC.prototype.afterStop = function() {
+QmachineWebClientConfig.prototype.afterStop = function() {
 	
 };
 
-TCC.prototype.stop = function() {
-	this.beforeStop();
-	QM.stop();
-	this.afterStop();
+QmachineWebClientConfig.prototype.stop = function() {
+	if(TCC.state === true) {
+		this.beforeStop();
+		QM.stop();
+		TCC.state = false;
+		this.afterStop();
+	}
 };
 
-TCC.prototype.verifyTime = function() {
+QmachineWebClientConfig.prototype.verifyTime = function() {
 	
 	var date = new Date();
 	var day = date.getDay();
@@ -270,7 +309,7 @@ TCC.prototype.verifyTime = function() {
 	}
 };
 
-TCC.prototype.formatTimeToStart = function(time_param) {
+QmachineWebClientConfig.prototype.stringToTime = function(time_param) {
 
 	if(typeof time_param == 'string') {
 
@@ -295,7 +334,7 @@ TCC.prototype.formatTimeToStart = function(time_param) {
 };
 
 
-TCC.prototype.loadDevideInformation = function() {
+QmachineWebClientConfig.prototype.loadDevideInformation = function() {
 
 // Copyright 2014 - ScientiaMobile, Inc., Reston, VA
 // WURFL Device Detection
@@ -332,7 +371,7 @@ TCC.prototype.loadDevideInformation = function() {
 }
 
 //não testado ainda
-TCC.prototype.verifyDevice = function() {
+QmachineWebClientConfig.prototype.verifyDevice = function() {
 	for(var cont = 0; cont < this.notRunDevices.length; cont++) {
 		if(this.deviceInformation.form_factor.toLowerCase() == this.notRunDevices[cont].toLowerCase()) {
 			return false;
@@ -340,3 +379,16 @@ TCC.prototype.verifyDevice = function() {
 	}
 	return true;
 }
+
+QmachineWebClientConfig.prototype.configMouseStationaryListener = function(element, time) {
+	
+	$(element).mouseover(function(){
+	  	clearTimeout(TCC.mouseStationaryListener);
+		TCC.mouseStationaryListener = setTimeout(function(){
+			TCC.start();
+		}, time);
+	});
+
+}
+
+var TCC = new QmachineWebClientConfig();
