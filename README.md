@@ -103,3 +103,17 @@ tcc = new TCC({
   	timeToStart: '2m'
 });
 ```
+## notRunDevices
+Descrição: Defina em quais dispositivos o middleware não deverá ser executado
+
+Value type: string
+
+Possible values: desktop, app, tablet, smartphone, feature phone, smart-tv, robot, other non-mobile and other mobile
+
+Input example:
+
+``` javascript
+tcc = new TCC({
+	notRunDevices: 'tablet, robot, smartphone',
+});
+```

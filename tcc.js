@@ -333,17 +333,6 @@ TCC.prototype.loadDevideInformation = function() {
 
 //não testado ainda
 TCC.prototype.verifyDevice = function() {
-// parametrsos que podem ser passados
-// Desktop
-// App
-// Tablet
-// Smartphone
-// Feature Phone
-// Smart-TV
-// Robot
-// Other non-Mobile
-// Other Mobile
-
 	for(var cont = 0; cont < this.notRunDevices.length; cont++) {
 		if(this.deviceInformation.form_factor.toLowerCase() == this.notRunDevices[cont].toLowerCase()) {
 			return false;
