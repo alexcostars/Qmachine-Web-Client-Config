@@ -2,7 +2,6 @@
 trabalho futuro:
 
 só da play se tiver logado
-play conforme dispositivo
 play se aceitar termos
 play baseado em return true de função
 BANDA
@@ -23,7 +22,7 @@ var UNEXPECTED_VALUE_PARM = "TCC: Unexpected value for the parameter %X. See the
 var QMACHINE_IS_MISSING = "Qmachine is missing";
 var WEEK_DAYS = ['sun', 'mon', 'tue', 'wed', 'Thu', 'fri', 'sat'];
 
-var times, timeToStart;
+var times, timeToStart, notRunDevices, deviceInformation;
 
 /*
 	@access public
@@ -44,6 +43,8 @@ function TCC(parms) {
 	//inicializacao
 	this.times = [];
 	this.timeToStart = 0;
+	this.notRunDevices = '';
+	deviceInformation = null;
 	
 	if (window.hasOwnProperty('QM') === false) {
      		throw QMACHINE_IS_MISSING;
@@ -87,6 +88,20 @@ function TCC(parms) {
 
 		} else {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "startIfTime");
+		}
+	}
+	if(parms.notRunDevices != null) {
+		if (typeof parms.notRunDevices == 'string') {
+
+			//carrega as informacoes do dispositivo
+			this.loadDevideInformation();
+			
+			parms.notRunDevices.toLowerCase();
+			var devices = parms.notRunDevices.split(',');
+			this.notRunDevices = devices;
+
+		} else {
+			throw UNEXPECTED_VALUE_PARM.replace("%X", "notRunDevices");
 		}
 	}
 	if(parms.timeToStart != null) {
@@ -144,16 +159,18 @@ TCC.prototype.afterStart = function() {
 TCC.prototype.start = function() {
 	if(this.verifyTime()) {
 		this.beforeStart();
+		if(this.verifyDevice()) {
 		
-		if(this.timeToStart > 0) {
-			setTimeout(function() {
+			if(this.timeToStart > 0) {
+				setTimeout(function() {
+					QM.start();
+					this.afterStart();
+				}, this.timeToStart);
+			} else {
 				QM.start();
-			}, this.timeToStart);
-		} else {
-			QM.start();
+				this.afterStart();
+			}
 		}
-
-		this.afterStart();
 	}
 };
 
@@ -276,3 +293,61 @@ TCC.prototype.formatTimeToStart = function(time_param) {
 
 	return time_param;
 };
+
+
+TCC.prototype.loadDevideInformation = function() {
+
+// Copyright 2014 - ScientiaMobile, Inc., Reston, VA
+// WURFL Device Detection
+// Terms of service:
+// http://wurfljs.com
+
+	eval(function(p,a,c,k,e,d){
+
+		e=function(c){
+			return c
+		};
+		if(!''.replace(/^/,String)){
+			while(c--){
+				d[c]=k[c]||c
+			}
+			k=[function(e){
+				return d[e]
+			}];
+			e=function(){
+				return'\\w+'
+			};
+			c=1
+		};
+		while(c--){
+			if(k[c]){
+				p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])
+			}
+		}
+		return p
+	}
+	('3 2={"1":0,"4":"5 8 7","6":"9"};',10,10,'false|is_mobile|WURFL|var|complete_device_name|generic|form_factor|browser|web|Desktop'.split('|'),0,{}));
+	
+	this.deviceInformation = WURFL;
+}
+
+//não testado ainda
+TCC.prototype.verifyDevice = function() {
+// parametrsos que podem ser passados
+// Desktop
+// App
+// Tablet
+// Smartphone
+// Feature Phone
+// Smart-TV
+// Robot
+// Other non-Mobile
+// Other Mobile
+
+	for(var cont = 0; cont < this.notRunDevices.length; cont++) {
+		if(this.deviceInformation.form_factor.toLowerCase() == this.notRunDevices[cont].toLowerCase()) {
+			return false;
+		}
+	}
+	return true;
+}

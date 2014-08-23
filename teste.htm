@@ -14,8 +14,22 @@
 	var tcc;
 
 	$( document ).ready(function() {
+
+		var timeout;
+		// document.onmousemove = function(){
+		//   clearTimeout(timeout);
+		//   timeout = setTimeout(function(){alert("move your mouse");}, 6000);
+		// }
+
+		$('*').mouseover(function(){
+		  	clearTimeout(timeout);
+		  	console.log('aqui');
+  			//timeout = setTimeout(function(){alert("move your mouse");}, 3000);
+		});
+
 	    tcc = new TCC({
-	  		timeToStart: '10s',
+	    	notRunDevices: 'tablet, Robot',
+	  		timeToStart: '5s',
 	  		autoStart: true
 	  	});
 	});
