@@ -13,32 +13,26 @@
 <script>
 	var tcc;
 
+
+
 	$( document ).ready(function() {
 
-		var timeout;
-		// document.onmousemove = function(){
-		//   clearTimeout(timeout);
-		//   timeout = setTimeout(function(){alert("move your mouse");}, 6000);
-		// }
+	      TCC.config({
+	      	//autoStart: true,
+	      	//timeToStart: '5s',
+	      	// afterStart: function() {
+	      	// 	alert('já iniciou');
+	      	// },
+	      	startAsMouseIsStationary: '5s'
+	  	  });
 
-		$('*').mouseover(function(){
-		  	clearTimeout(timeout);
-		  	console.log('aqui');
-  			//timeout = setTimeout(function(){alert("move your mouse");}, 3000);
-		});
-
-	    tcc = new TCC({
-	    	notRunDevices: 'tablet, Robot',
-	  		timeToStart: '5s',
-	  		autoStart: true
-	  	});
 	});
 
 	$( "#play" ).click(function() {
 	  	tcc.start();
 	});
 	$( "#stop" ).click(function() {
-	  	QM.stop();
+	  	TCC.stop();
 	});
 </script>
  
