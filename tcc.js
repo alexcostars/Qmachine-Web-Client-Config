@@ -141,6 +141,16 @@ QmachineWebClientConfig.prototype.config = function(parms) {
 
 		this.configMouseStationaryListener(element, time);
 	}
+	if(parms.loseFocus != null) {
+		
+		if(typeof parms.loseFocus == 'boolean') {
+			if(parms.loseFocus === true) {
+				this.configLoseFocus();
+			}
+		} else {
+			throw UNEXPECTED_VALUE_PARM.replace("%X", "loseFocus");
+		}
+	}
 	if(parms.autoStart != null) {
 		if (typeof parms.autoStart == 'boolean') {
 			
@@ -391,4 +401,15 @@ QmachineWebClientConfig.prototype.configMouseStationaryListener = function(eleme
 
 }
 
+QmachineWebClientConfig.prototype.configLoseFocus = function() {
+	$(window).focus(function() {
+	    TCC.stop();
+	});
+
+	$(window).blur(function() {
+	    TCC.start();
+	});
+}
+
+//define global object
 var TCC = new QmachineWebClientConfig();
