@@ -108,7 +108,7 @@ Descrição: Defina em quais dispositivos o middleware não deverá ser executad
 
 Value type: string
 
-Possible values: desktop, app, tablet, smartphone, feature phone, smart-tv, robot, other non-mobile and other mobile
+Possible values: `desktop`, `app`, `tablet`, `smartphone`, `feature phone`, `smart-tv`, `robot`, `other non-mobile` and `other mobile`
 
 Input example:
 
