@@ -1,8 +1,6 @@
 /*
 trabalho futuro:
 
-só da play se tiver logado
-play se aceitar termos
 play baseado em return true de função
 BANDA
 limite de execução

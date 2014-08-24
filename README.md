@@ -11,7 +11,7 @@ E construa um objeto do tipo TCC
 ``` javascript
 <script type="text/javascript">
 	$( document ).ready(function() {
-	    var tcc = new TCC(
+	    TCC.config(
 	      param1: value,
 	      param2: value,
 	      ...
