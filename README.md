@@ -22,7 +22,7 @@ E construa um objeto do tipo TCC
 ## beforeStart
 Descrição: Execute uma função antes do processo de colaboração ser iniciado
 
-Value type: function
+Value type: ```function```
 
 ``` javascript
 TCC.config({
@@ -34,7 +34,7 @@ TCC.config({
 ## afterStart
 Descrição: Execute uma função após o processo de colaboração ser iniciado
 
-Value type: function
+Value type: ```function```
 
 ``` javascript
 TCC.config({
@@ -47,7 +47,7 @@ TCC.config({
 ## beforeStop
 Descrição: Execute uma função antes do processo de colaboração ser interrompido
 
-Value type: function
+Value type: ```function```
 
 ``` javascript
 TCC.config({
@@ -60,7 +60,7 @@ TCC.config({
 ## afterStop
 Descrição: Execute uma função após do processo de colaboração ser interrompido
 
-Value type: function
+Value type: ```function```
 
 ``` javascript
 TCC.config({
@@ -72,7 +72,7 @@ TCC.config({
 ## startIfTime
 Descrição: Defina em que dias/horas o processo de colaboração poderá ser iniciado
 
-Value type: string
+Value type: ```string```
 
 Input example:
 
@@ -89,7 +89,7 @@ TCC.config({
 ## timeToStart
 Descrição: Defina um período de tempo que deve ser aguardado antes de iniciar o processo de colaboração
 
-Value type: string or numeric
+Value type: ```string``` or ```numeric```
 
 Input example:
 
@@ -106,7 +106,7 @@ TCC.config({
 ## notRunDevices
 Descrição: Defina em quais dispositivos o middleware não deverá ser executado
 
-Value type: string
+Value type: ```string```
 
 Possible values: `desktop`, `app`, `tablet`, `smartphone`, `feature phone`, `smart-tv`, `robot`, `other non-mobile` and `other mobile`
 
@@ -121,7 +121,7 @@ TCC.config({
 ## startAsMouseIsStationary
 Descrição: Iniciará quando o cursor do mouse não apresentar movimento sobre a página acessada
 
-Value type: string ou numeric
+Value type: ```string``` ou ```numeric```
 
 Input example:
 
@@ -139,7 +139,7 @@ TCC.config({
 ## loseFocus
 Descrição: Iniciará quando o usuário não estiver com a aba da página ativa (estiver minimizada ou visualizado outra aba do browser)
 
-Value type: boolean
+Value type: ```boolean```
 
 Input example:
 
@@ -152,7 +152,7 @@ TCC.config({
 ## autoStart
 Descrição: Define que o middleware será iniciado automaticamente após o carregamento da página
 
-Value type: boolean
+Value type: ```boolean```
 
 Input example:
 
