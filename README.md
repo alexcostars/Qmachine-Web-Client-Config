@@ -25,7 +25,7 @@ Descrição: Execute uma função antes do processo de colaboração ser iniciad
 Value type: function
 
 ``` javascript
-tcc = new TCC({
+TCC.config({
   	beforeStart: function() {
   		alert('Process will start');
   	}
@@ -37,7 +37,7 @@ Descrição: Execute uma função após o processo de colaboração ser iniciado
 Value type: function
 
 ``` javascript
-tcc = new TCC({
+TCC.config({
   	afterStart: function() {
   		alert('Process began');
   	}
@@ -50,7 +50,7 @@ Descrição: Execute uma função antes do processo de colaboração ser interro
 Value type: function
 
 ``` javascript
-tcc = new TCC({
+TCC.config({
   	beforeStop: function() {
   		alert('Process will be stopped');
   	}
@@ -63,7 +63,7 @@ Descrição: Execute uma função após do processo de colaboração ser interro
 Value type: function
 
 ``` javascript
-tcc = new TCC({
+TCC.config({
   	afterStop: function() {
   		alert('Process stopped');
   	}
@@ -77,7 +77,7 @@ Value type: string
 Input example:
 
 ``` javascript
-tcc = new TCC({
+TCC.config({
 	//here we defined when the colaboration process will start
 	//Mon: all Mon days
 	//Thu(8-15): all Thu days, only in interval from 8 A.M. to 15 P.M.
@@ -94,7 +94,7 @@ Value type: string or numeric
 Input example:
 
 ``` javascript
-tcc = new TCC({
+TCC.config({
 	//you can set any formats, here we use the number 2 for example:
 	//'2m': whaiting 2 minutes
 	//'2s': whaiting 2 seconds
@@ -113,7 +113,51 @@ Possible values: `desktop`, `app`, `tablet`, `smartphone`, `feature phone`, `sma
 Input example:
 
 ``` javascript
-tcc = new TCC({
+TCC.config({
 	notRunDevices: 'tablet, robot, smartphone',
+});
+```
+
+## startAsMouseIsStationary
+Descrição: Iniciará quando o cursor do mouse não apresentar movimento sobre a página acessada
+
+Value type: string ou numeric
+
+Input example:
+
+``` javascript
+TCC.config({
+	//you can set any formats, here we use the number 2 for example:
+	//'2m': starts after 2 minutes of no mouse
+	//'2s': starts after 2 seconds of no mouse
+	//'2': starts after 2 miliseconds of no mouse
+	//2: starts after 2 miliseconds of no mouse
+	startAsMouseIsStationary: '2m',
+});
+
+```
+## loseFocus
+Descrição: Iniciará quando o usuário não estiver com a aba da página ativa (estiver minimizada ou visualizado outra aba do browser)
+
+Value type: boolean
+
+Input example:
+
+``` javascript
+TCC.config({
+	loseFocus: true,
+});
+```
+
+## autoStart
+Descrição: Define que o middleware será iniciado automaticamente após o carregamento da página
+
+Value type: boolean
+
+Input example:
+
+``` javascript
+TCC.config({
+	autoStart: true,
 });
 ```
