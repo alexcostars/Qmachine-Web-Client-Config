@@ -185,3 +185,22 @@ TCC.config({
   	}
 });
 ```
+## timeToStart
+Descrição: Defina um período de tempo que deve ser aguardado após processar X tarefas para que o processo voluntário continue
+
+Value type: ```array[numeric, numeric/string]```
+
+Input example:
+
+``` javascript
+TCC.config({
+	//you can set any formats for time, here we use the number 2 for example:
+	//'2m': whaiting 2 minutes
+	//'2s': whaiting 2 seconds
+	//'2': whaiting 2 miliseconds
+	//2: whaiting 2 miliseconds
+
+	//defines a time interval of 2 minutes to each six processed jobs
+  	waitAfterProcessingTasks: [6, '2m']
+});
+```

@@ -1,19 +1,4 @@
 /*
-trabalho futuro:
-
-BANDA
-limite de execução
-por % de processamento
-a cada x tarefas espera x segundos
-
-a função loop da linha 2320 que faz os alert no console, ver depois 
-
-*/
-
-
-
-
-/*
 	@access public
 	@description blabalbal
 	@author Alex Costa
@@ -35,7 +20,7 @@ function QmachineWebClientConfig() {
 	var UNEXPECTED_VALUE_PARM = "TCC: Unexpected value for the parameter %X. See the documentation";
 	var QMACHINE_IS_MISSING = "Qmachine is missing";
 	var WEEK_DAYS = ['sun', 'mon', 'tue', 'wed', 'Thu', 'fri', 'sat'];
-	var times, timeToStart, notRunDevices, deviceInformation, mouseStationaryListener, state;
+	var times, timeToStart, notRunDevices, deviceInformation, mouseStationaryListener, state, limitProcessingTasks, timeToWaitToContinueProcessing, processedTasks;
 	 
 
 	//inicializacao
@@ -45,6 +30,9 @@ function QmachineWebClientConfig() {
 	this.deviceInformation = null;
 	this.mouseStationaryListener = null;
 	this.state = false;
+	this.processedTasks = 0;
+	this.limitProcessingTasks = 0;
+	this.timeToWaitToContinueProcessing = 0;
 
 }
 
@@ -157,6 +145,16 @@ QmachineWebClientConfig.prototype.config = function(parms) {
 			TCC.runAfterTaskDone = parms.runAfterTaskDone;
 		} else {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "runAfterTaskDone");
+		}
+	}
+	if(parms.waitAfterProcessingTasks != null) {
+		
+		if (typeof parms.waitAfterProcessingTasks == 'object') {
+
+			this.limitProcessingTasks = parms.waitAfterProcessingTasks[0];
+			this.timeToWaitToContinueProcessing = this.stringToTime(parms.waitAfterProcessingTasks[1]);
+		} else {
+			throw UNEXPECTED_VALUE_PARM.replace("%X", "waitAfterProcessingTasks");
 		}
 	}
 	if(parms.autoStart != null) {
@@ -430,6 +428,19 @@ QmachineWebClientConfig.prototype.configLoseFocus = function() {
 /* sobrescrevendo a função console.log para poder obter a saída do QMachine */
 var oldLog = console.log;
 console.log = function (message) {
+
+	//se estiver controlando waitAfterProcessingTasks
+	if(TCC.limitProcessingTasks > 0 && TCC.timeToWaitToContinueProcessing > 0) {
+		TCC.processedTasks++;
+
+		if(TCC.processedTasks >= TCC.limitProcessingTasks) {
+			TCC.processedTasks = 0;
+			TCC.stop();
+			setTimeout(function() {
+				TCC.start();
+			}, TCC.timeToWaitToContinueProcessing);
+		}
+	}
 
 	if(message.substring(0, 17) == "Nothing to do ...") {
 		TCC.runAfterNothingToDoMessage();
