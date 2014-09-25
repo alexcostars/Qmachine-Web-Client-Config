@@ -161,3 +161,27 @@ TCC.config({
 	autoStart: true,
 });
 ```
+## runAfterNothingToDoMessage
+Descrição: Execute uma função após não encontrar nenhuma tarefa para ser processada
+
+Value type: ```function```
+
+``` javascript
+TCC.config({
+  	runAfterNothingToDoMessage: function() {
+  		alert('Nothing to do');
+  	}
+});
+```
+## runAfterTaskDone
+Descrição: Execute uma função após terminar de processar uma tarefa
+
+Value type: ```function```
+
+``` javascript
+TCC.config({
+  	runAfterTaskDone: function(job_key) {
+  		alert('Task: ' + job_key + ' is done!');
+  	}
+});
+```
