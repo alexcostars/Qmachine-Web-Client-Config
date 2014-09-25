@@ -1,17 +1,11 @@
 /*
 trabalho futuro:
 
-play baseado em return true de função
 BANDA
 limite de execução
-bateria
 por % de processamento
 a cada x tarefas espera x segundos
-inatividade do mouse
-inatividade do teclado
-console de logs
 
-ver mais sobre a variavel state (linha 1792)
 a função loop da linha 2320 que faz os alert no console, ver depois 
 
 */
@@ -149,6 +143,22 @@ QmachineWebClientConfig.prototype.config = function(parms) {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "loseFocus");
 		}
 	}
+	if(parms.runAfterNothingToDoMessage != null) {
+		
+		if (typeof parms.runAfterNothingToDoMessage == 'function') { 
+			TCC.runAfterNothingToDoMessage = parms.runAfterNothingToDoMessage;
+		} else {
+			throw UNEXPECTED_VALUE_PARM.replace("%X", "runAfterNothingToDoMessage");
+		}
+	}
+	if(parms.runAfterTaskDone != null) {
+		
+		if (typeof parms.runAfterTaskDone == 'function') { 
+			TCC.runAfterTaskDone = parms.runAfterTaskDone;
+		} else {
+			throw UNEXPECTED_VALUE_PARM.replace("%X", "runAfterTaskDone");
+		}
+	}
 	if(parms.autoStart != null) {
 		if (typeof parms.autoStart == 'boolean') {
 			
@@ -259,6 +269,14 @@ QmachineWebClientConfig.prototype.stop = function() {
 		TCC.state = false;
 		this.afterStop();
 	}
+};
+
+QmachineWebClientConfig.prototype.runAfterNothingToDoMessage = function() {
+	
+};
+
+QmachineWebClientConfig.prototype.runAfterTaskDone = function(job_key) {
+	
 };
 
 QmachineWebClientConfig.prototype.verifyTime = function() {
@@ -408,6 +426,22 @@ QmachineWebClientConfig.prototype.configLoseFocus = function() {
 	    TCC.start();
 	});
 }
+
+/* sobrescrevendo a função console.log para poder obter a saída do QMachine */
+var oldLog = console.log;
+console.log = function (message) {
+
+	if(message.substring(0, 17) == "Nothing to do ...") {
+		TCC.runAfterNothingToDoMessage();
+	}
+
+	if(message.substring(0, 5) == "Done:") {
+		var job_key = message.replace("Done: ", "");
+		TCC.runAfterTaskDone(job_key);
+	}
+	
+    oldLog.apply(console, arguments);
+};
 
 //define global object
 var TCC = new QmachineWebClientConfig();
