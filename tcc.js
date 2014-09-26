@@ -1,19 +1,7 @@
-/*
-	@access public
-	@description blabalbal
-	@author Alex Costa
-	@example
-	@fire metodos que esse metodo chama
-	@name beforeStart
-	@param
-	@return
-	@since 2014
-*/
-/*
-@constructs
-*/
-
-
+//- JavaScript source code
+//- tcc.js ~~
+//  ~~ (c) SRW, Sep 2014
+//  ~~ last updated Out 2014
 
 function QmachineWebClientConfig() {
 
@@ -22,7 +10,6 @@ function QmachineWebClientConfig() {
 	var WEEK_DAYS = ['sun', 'mon', 'tue', 'wed', 'Thu', 'fri', 'sat'];
 	var times, timeToStart, notRunDevices, deviceInformation, mouseStationaryListener, state, limitProcessingTasks, timeToWaitToContinueProcessing, processedTasks;
 	 
-
 	//inicializacao
 	this.times = [];
 	this.timeToStart = 0;
@@ -33,17 +20,14 @@ function QmachineWebClientConfig() {
 	this.processedTasks = 0;
 	this.limitProcessingTasks = 0;
 	this.timeToWaitToContinueProcessing = 0;
-
 }
 
 QmachineWebClientConfig.prototype.config = function(parms) {
 	
-	
 	if (window.hasOwnProperty('QM') === false) {
  		throw QMACHINE_IS_MISSING;
  		return;
-    }
-
+    	}
 	if(parms.beforeStart != null) {
 		if (typeof parms.beforeStart == 'function') {
 			this.beforeStart = parms.beforeStart;
