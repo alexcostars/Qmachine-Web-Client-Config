@@ -1,41 +1,88 @@
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script src="https://www.qmachine.org/qm.js"></script>
-  <script src="tcc.js"></script>
-</head>
-<body>
- 
-<p id="play">play</p>
-<p id="stop">stop</p>
- 
-<script>
-	var tcc;
+<HTML>
+   <HEAD>
+   	<meta charset="utf-8">
+      <TITLE>My first HTML document</TITLE>
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+      <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+      <script src="https://www.qmachine.org/qm.js"></script>
+      <script src="tcc.js"></script>
 
+      <style type="text/css">
+      		body {
+      			background-image: url('http://elegantthemes.com/preview/Divi/wp-content/uploads/2014/04/geometic-bg-white-2.jpg');
+      		}
 
+            #status_format {
+               font-family: 'Lobster';
+               font-size: 64px;
+               text-align: center;
+               width: 100%;
+               height: 100%;
+            }
 
-	$( document ).ready(function() {
+      		p {
+      			color: black;
+               position: relative;
+               top: 25%;
+      		}
+      </style>
 
-	      TCC.config({
-	      	//autoStart: true,
-	      	//timeToStart: '5s',
-	      	// afterStart: function() {
-	      	// 	alert('já iniciou');
-	      	// },
-	      	loseFocus: true
-	      	//startAsMouseIsStationary: '5s'
-	  	  });
+      <script type="text/javascript">
 
-	});
+         window.cont_verif = 0;
+         window.cont_concl = 0;
 
-	$( "#play" ).click(function() {
-	  	tcc.start();
-	});
-	$( "#stop" ).click(function() {
-	  	TCC.stop();
-	});
-</script>
- 
-</body>
-</html>
+         function imprimir() {
+            $('#status').html(window.cont_concl + " processadas / " + window.cont_verif + " verificadas");
+         }
+
+         $( document ).ready(function() {
+            
+            imprimir();
+
+            TCC.config({
+               autoStart: true,
+               runAfterNothingToDoMessage: function() {
+                  window.cont_verif++;
+                  imprimir();
+               },
+               runAfterTaskDone: function() {
+                  window.cont_verif++;
+                  window.cont_concl++;
+                  imprimir();
+               }
+            });
+         });
+
+      	//var cont = 0;
+      
+		// function processar() {
+		// 	var numero = Math.floor((Math.random() * 99000) + 1);
+		// 	QM.submit(numero, function (x) { return x + 2; }).print();
+		// 	console.log('Passando para processar o valor: ' + numero);
+
+		// 	cont++;
+		// 	$('#status').html(cont + ' tarefas');
+
+		// 	setTimeout(function() {
+		// 		processar();	      
+		// 	}, 5000);
+		// }
+
+		// setTimeout(function() {
+		// 	location.reload();	      
+		// }, 3600000); //a cada 1 hora recarrega a página
+	      
+		//QM.start();
+		//processar();
+      </script>
+
+   </HEAD>
+   <BODY>
+
+      <div id='status_format' style="">
+      		<p id='status'></p>
+      </div>
+   </BODY>
+</HTML>
+
