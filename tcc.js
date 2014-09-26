@@ -171,16 +171,15 @@ QmachineWebClientConfig.prototype.config = function(parms) {
 };
 /*
 	@name beforeStart
-	@description Define um evento a ser executado antes de iniciar o processo de colaboração
+	@description Execute uma função antes do processo de colaboração ser iniciado
 	@author Alex Costa
 	@since 2014-08
-	@abstract
-	@access public
 	@example
-		var tcc = new TCC();
-	  	tcc.beforeStart = function() {
-	  		//code here
-	  	}
+		TCC.config({
+		    beforeStart: function() {
+		        alert('Process will start');
+		    }
+		});
 */
 QmachineWebClientConfig.prototype.beforeStart = function() {
 	
@@ -188,21 +187,28 @@ QmachineWebClientConfig.prototype.beforeStart = function() {
 
 /*
 	@name afterStart
-	@description Define um evento a ser executado após iniciar o processo de colaboração
+	@description Execute uma função após o processo de colaboração ser iniciado
 	@author Alex Costa
 	@since 2014-08
-	@abstract
-	@access public
 	@example
-		var tcc = new TCC();
-	  	tcc.afterStart = function() {
-	  		//code here
-	  	}
+		TCC.config({
+		    afterStart: function() {
+		        alert('Process began');
+		    }
+		});
 */
 QmachineWebClientConfig.prototype.afterStart = function() {
 	
 };
 
+/*
+	@name start
+	@description Inicia o processo de colaboração
+	@author Alex Costa
+	@since 2014-08
+	@example
+		TCC.start();
+*/
 QmachineWebClientConfig.prototype.start = function() {
 
 	if(TCC.state === false) {
@@ -228,16 +234,15 @@ QmachineWebClientConfig.prototype.start = function() {
 
 /*
 	@name beforeStop
-	@description Define um evento a ser executado antes de parar o processo de colaboração
+	@description Execute uma função antes do processo de colaboração ser interrompido
 	@author Alex Costa
 	@since 2014-08
-	@abstract
-	@access public
 	@example
-		var tcc = new TCC();
-	  	tcc.beforeStop = function() {
-	  		//code here
-	  	}
+		TCC.config({
+		    beforeStop: function() {
+		        alert('Process will be stopped');
+		    }
+		});
 */
 QmachineWebClientConfig.prototype.beforeStop = function() {
 	
@@ -245,21 +250,28 @@ QmachineWebClientConfig.prototype.beforeStop = function() {
 
 /*
 	@name afterStop
-	@description Define um evento a ser executado após parar o processo de colaboração
+	@description Execute uma função após do processo de colaboração ser interrompido
 	@author Alex Costa
 	@since 2014-08
-	@abstract
-	@access public
 	@example
-		var tcc = new TCC();
-	  	tcc.afterStop = function() {
-	  		//code here
-	  	}
+		TCC.config({
+		    afterStop: function() {
+		        alert('Process stopped');
+		    }
+		});
 */
 QmachineWebClientConfig.prototype.afterStop = function() {
 	
 };
 
+/*
+	@name stop
+	@description Para o processo de colaboração
+	@author Alex Costa
+	@since 2014-08
+	@example
+		TCC.stop();
+*/
 QmachineWebClientConfig.prototype.stop = function() {
 	if(TCC.state === true) {
 		this.beforeStop();
@@ -269,10 +281,34 @@ QmachineWebClientConfig.prototype.stop = function() {
 	}
 };
 
+/*
+	@name runAfterNothingToDoMessage
+	@description Execute uma função após não encontrar nenhuma tarefa para ser processada
+	@author Alex Costa
+	@since 2014-09
+	@example
+		TCC.config({
+		    runAfterNothingToDoMessage: function() {
+		        alert('Nothing to do');
+		    }
+		});
+*/
 QmachineWebClientConfig.prototype.runAfterNothingToDoMessage = function() {
 	
 };
 
+/*
+	@name runAfterTaskDone
+	@description Execute uma função após terminar de processar uma tarefa
+	@author Alex Costa
+	@since 2014-09
+	@example
+		TCC.config({
+		    runAfterTaskDone: function(job_key) {
+		        alert('Task: ' + job_key + ' is done!');
+		    }
+		});
+*/
 QmachineWebClientConfig.prototype.runAfterTaskDone = function(job_key) {
 	
 };
@@ -360,11 +396,6 @@ QmachineWebClientConfig.prototype.stringToTime = function(time_param) {
 
 QmachineWebClientConfig.prototype.loadDevideInformation = function() {
 
-// Copyright 2014 - ScientiaMobile, Inc., Reston, VA
-// WURFL Device Detection
-// Terms of service:
-// http://wurfljs.com
-
 	eval(function(p,a,c,k,e,d){
 
 		e=function(c){
@@ -404,6 +435,21 @@ QmachineWebClientConfig.prototype.verifyDevice = function() {
 	return true;
 }
 
+/*
+	@name configMouseStationaryListener
+	@description Iniciará quando o cursor do mouse não apresentar movimento sobre a página acessada
+	@author Alex Costa
+	@since 2014-09
+	@example
+		TCC.config({
+		    //you can set any formats, here we use the number 2 for example:
+		    //'2m': starts after 2 minutes of no mouse
+		    //'2s': starts after 2 seconds of no mouse
+		    //'2': starts after 2 miliseconds of no mouse
+		    //2: starts after 2 miliseconds of no mouse
+		    startAsMouseIsStationary: '2m',
+		});
+*/
 QmachineWebClientConfig.prototype.configMouseStationaryListener = function(element, time) {
 	
 	$(element).mouseover(function(){
@@ -415,6 +461,16 @@ QmachineWebClientConfig.prototype.configMouseStationaryListener = function(eleme
 
 }
 
+/*
+	@name configLoseFocus
+	@description Iniciará quando o usuário não estiver com a aba da página ativa (estiver minimizada ou visualizado outra aba do browser)
+	@author Alex Costa
+	@since 2014-09
+	@example
+		TCC.config({
+		    loseFocus: true,
+		});
+*/
 QmachineWebClientConfig.prototype.configLoseFocus = function() {
 	$(window).focus(function() {
 	    TCC.stop();
