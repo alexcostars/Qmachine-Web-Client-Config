@@ -19,6 +19,18 @@ E construa um objeto do tipo TCC
 	});
 </script>
 ```
+## start
+Descrição: Inicia o processo de colaboração
+
+``` javascript
+TCC.start();
+```
+## stop
+Descrição: Interrompe o processo de colaboração
+
+``` javascript
+TCC.stop();
+```
 ## beforeStart
 Descrição: Execute uma função antes do processo de colaboração ser iniciado
 
