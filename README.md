@@ -216,3 +216,15 @@ TCC.config({
   	waitAfterProcessingTasks: [6, '2m']
 });
 ```
+## allowUserInterface
+Descrição: Defina se será mostrada ao usuário uma Interface de Manipulação do projeto TCC
+
+Value type: ```boolean```
+
+Input example:
+
+``` javascript
+TCC.config({
+  	allowUserInterface: true
+});
+```

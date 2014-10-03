@@ -13,13 +13,13 @@
       			background-image: url('http://elegantthemes.com/preview/Divi/wp-content/uploads/2014/04/geometic-bg-white-2.jpg');
       		}
 
-            	#status_format {
+            #status_format {
                		font-family: 'Lobster';
                		font-size: 64px;
                		text-align: center;
                		width: 100%;
                		height: 100%;
-            	}
+            }
 
       		p {
       			color: black;
@@ -39,10 +39,11 @@
 
          $( document ).ready(function() {
             
-            imprimir();
+         	imprimir();
 
             TCC.config({
                autoStart: true,
+               allowUserInterface: true,
                runAfterNothingToDoMessage: function() {
                   window.cont_verif++;
                   imprimir();
@@ -54,28 +55,6 @@
                }
             });
          });
-
-      	//var cont = 0;
-      
-		// function processar() {
-		// 	var numero = Math.floor((Math.random() * 99000) + 1);
-		// 	QM.submit(numero, function (x) { return x + 2; }).print();
-		// 	console.log('Passando para processar o valor: ' + numero);
-
-		// 	cont++;
-		// 	$('#status').html(cont + ' tarefas');
-
-		// 	setTimeout(function() {
-		// 		processar();	      
-		// 	}, 5000);
-		// }
-
-		// setTimeout(function() {
-		// 	location.reload();	      
-		// }, 3600000); //a cada 1 hora recarrega a página
-	      
-		//QM.start();
-		//processar();
       </script>
 
    </HEAD>

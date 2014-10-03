@@ -8,8 +8,9 @@ function QmachineWebClientConfig() {
 	var UNEXPECTED_VALUE_PARM = "TCC: Unexpected value for the parameter %X. See the documentation";
 	var QMACHINE_IS_MISSING = "Qmachine is missing";
 	var WEEK_DAYS = ['sun', 'mon', 'tue', 'wed', 'Thu', 'fri', 'sat'];
-	var times, timeToStart, notRunDevices, deviceInformation, mouseStationaryListener, state, limitProcessingTasks, timeToWaitToContinueProcessing, processedTasks;
-	 
+	var times, timeToStart, notRunDevices, deviceInformation, mouseStationaryListener, state, limitProcessingTasks, timeToWaitToContinueProcessing, processedTasks, toolbar_qm_is_visible, collaboration_speed_user_interface;
+
+
 	//inicializacao
 	this.times = [];
 	this.timeToStart = 0;
@@ -20,6 +21,8 @@ function QmachineWebClientConfig() {
 	this.processedTasks = 0;
 	this.limitProcessingTasks = 0;
 	this.timeToWaitToContinueProcessing = 0;
+	this.toolbar_qm_is_visible = 0;
+	this.collaboration_speed_user_interface = 3;
 }
 
 QmachineWebClientConfig.prototype.config = function(parms) {
@@ -27,7 +30,7 @@ QmachineWebClientConfig.prototype.config = function(parms) {
 	if (window.hasOwnProperty('QM') === false) {
  		throw QMACHINE_IS_MISSING;
  		return;
-    	}
+    }
 	if(parms.beforeStart != null) {
 		if (typeof parms.beforeStart == 'function') {
 			this.beforeStart = parms.beforeStart;
@@ -139,6 +142,16 @@ QmachineWebClientConfig.prototype.config = function(parms) {
 			this.timeToWaitToContinueProcessing = this.stringToTime(parms.waitAfterProcessingTasks[1]);
 		} else {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "waitAfterProcessingTasks");
+		}
+	}
+	if(parms.allowUserInterface != null) {
+
+		if (typeof parms.allowUserInterface == 'boolean') {
+			if(parms.allowUserInterface === true) {
+				this.showUserInterface();
+			}
+		} else {
+			throw UNEXPECTED_VALUE_PARM.replace("%X", "allowUserInterface");
 		}
 	}
 	if(parms.autoStart != null) {
@@ -492,6 +505,66 @@ console.log = function (message) {
 	}
 	
     oldLog.apply(console, arguments);
+};
+
+
+QmachineWebClientConfig.prototype.showUserInterface = function() {
+
+	/* insere a interface com o usuário dentro do body da página hospedeira */
+	var user_interface_html = "";
+	user_interface_html += "<div class='qm_user_config'>";
+	user_interface_html += "	<div class='play_pause_qm'></div>";
+	user_interface_html += "	<div class='selecionar_velocidade_qm'>Utilizar poucos recursos</div>";
+	user_interface_html += "</div>";
+	user_interface_html += "<div class='button_open_close_toolbar_qm'></div>";
+	
+	$("body").html($("body").html() + user_interface_html);
+	$(".qm_user_config").attr("style", "position: fixed; z-index: 99998; bottom: 0px; right: 0px; width: 100%; height: 32px; background-color: black; display: none;");
+	$(".selecionar_velocidade_qm").attr("style", "color: white; height: 32px; font-family: 'Arial'; font-size: 16px; margin-top: 8px; margin-left: 50px; cursor: pointer;");
+	$(".button_open_close_toolbar_qm").attr("style", "position: fixed; z-index: 99999; bottom: 0px; right: 10px; width: 35px; height: 32px; background: url('footer_button_up.png') right no-repeat #121212; display: block; -moz-border-radius: 4px 4px 0px 0px; -webkit-border-radius: 4px 4px 0px 0px; border-radius: 4px 4px 0px 0px;");
+
+	/* verifica o estado da colaboração para iniciar com o botão "pausar colaboração" ou "iniciar colaboração" */
+	if(TCC.state === false) { 
+		$(".play_pause_qm").attr('style', 'height: 32px; width: 32px; float: left; background-size: 32px;  background-image: url("pause.png");');
+	} else {
+		$(".play_pause_qm").attr('style', 'height: 32px; width: 32px; float: left; background-size: 32px;  background-image: url("play.png");');
+	}
+
+	/*configurando o botão que mostra ou esconte a interface com o usuário */
+	$(".button_open_close_toolbar_qm").click(function() {
+		if(TCC.toolbar_qm_is_visible == 0) {
+			$(".qm_user_config").slideDown();
+			TCC.toolbar_qm_is_visible = 1;
+		} else {
+			$(".qm_user_config").slideUp();
+			TCC.toolbar_qm_is_visible = 0;
+		}
+	});
+
+	/* configurando o botão play/pause da interface com o usuário */
+	$(".play_pause_qm").click(function(){
+		if(TCC.state === false) {
+			TCC.start();
+			$(".play_pause_qm").css('background-image',  "url('pause.png')");
+		} else {
+			TCC.stop();
+			$(".play_pause_qm").css('background-image',  "url('play.png')");
+		}
+	});
+
+	/* configurando o botão para selecionar a velocidade da interface com o usuário */
+	$(".selecionar_velocidade_qm").click(function() {
+		if(TCC.collaboration_speed_user_interface == 1) {
+			$(".selecionar_velocidade_qm").html("Utilizar muitos recursos");
+			TCC.collaboration_speed_user_interface = 2;
+		} else if(TCC.collaboration_speed_user_interface == 2) {
+			$(".selecionar_velocidade_qm").html("Utilizar poucos recursos");
+			TCC.collaboration_speed_user_interface = 3;
+		} else {
+			$(".selecionar_velocidade_qm").html("Utilizar médios recursos");
+			TCC.collaboration_speed_user_interface = 1;
+		}
+	});
 };
 
 //define global object
