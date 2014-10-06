@@ -197,7 +197,7 @@ TCC.config({
   	}
 });
 ```
-## timeToStart
+## waitAfterProcessingTasks
 Descrição: Defina um período de tempo que deve ser aguardado após processar X tarefas para que o processo voluntário continue
 
 Value type: ```array[numeric, numeric/string]```
