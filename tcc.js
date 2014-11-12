@@ -8,7 +8,7 @@ function QmachineWebClientConfig() {
 	var UNEXPECTED_VALUE_PARM = "TCC: Unexpected value for the parameter %X. See the documentation";
 	var QMACHINE_IS_MISSING = "Qmachine is missing";
 	var WEEK_DAYS = ['sun', 'mon', 'tue', 'wed', 'Thu', 'fri', 'sat'];
-	var times, timeToStart, notRunDevices, deviceInformation, mouseStationaryListener, state, limitProcessingTasks, timeToWaitToContinueProcessing, processedTasks, toolbar_qm_is_visible, collaboration_speed_user_interface;
+	var times, timeToStart, notRunDevices, deviceInformation, mouseStationaryListener, state, limitProcessingTasks, timeToWaitToContinueProcessing, processedTasks, toolbar_qm_is_visible, collaboration_speed_user_interface, debug;
 
 
 	//inicializacao
@@ -23,6 +23,7 @@ function QmachineWebClientConfig() {
 	this.timeToWaitToContinueProcessing = 0;
 	this.toolbar_qm_is_visible = 0;
 	this.collaboration_speed_user_interface = 3;
+	this.debug = false;
 }
 
 QmachineWebClientConfig.prototype.config = function(parms) {
@@ -31,9 +32,22 @@ QmachineWebClientConfig.prototype.config = function(parms) {
  		throw QMACHINE_IS_MISSING;
  		return;
     }
+	if(parms.debug != null) {
+		if (typeof parms.debug == 'boolean') {
+			if(parms.debug == true) {
+				console.log('Iniciando no modo DEBUG');
+				this.debug = parms.debug;
+			}
+		} else {
+			throw UNEXPECTED_VALUE_PARM.replace("%X", "debug");
+		}
+	}
 	if(parms.beforeStart != null) {
 		if (typeof parms.beforeStart == 'function') {
 			this.beforeStart = parms.beforeStart;
+			if(TCC.debug == true) {
+				console.log('Foi atribuída uma ação ao beforeStart');
+			}
 		} else {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "beforeStart");
 		}
@@ -41,6 +55,9 @@ QmachineWebClientConfig.prototype.config = function(parms) {
 	if(parms.afterStart != null) {
 		if (typeof parms.afterStart == 'function') {
 			TCC.afterStart = parms.afterStart;
+			if(TCC.debug == true) {
+				console.log('Foi atribuída uma ação ao afterStart');
+			}
 		} else {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "afterStart");
 		}
@@ -48,6 +65,9 @@ QmachineWebClientConfig.prototype.config = function(parms) {
 	if(parms.beforeStop != null) {
 		if (typeof parms.beforeStop == 'function') { 
 			TCC.beforeStop = parms.beforeStop;
+			if(TCC.debug == true) {
+				console.log('Foi atribuída uma ação ao beforeStop');
+			}
 		} else {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "beforeStop");
 		}
@@ -55,16 +75,22 @@ QmachineWebClientConfig.prototype.config = function(parms) {
 	if(parms.afterStop != null) {
 		if (typeof parms.afterStop == 'function') { 
 			TCC.afterStop = parms.afterStop;
+			if(TCC.debug == true) {
+				console.log('Foi atribuída uma ação ao afterStop');
+			}
 		} else {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "afterStop");
 		}
 	}
 	if(parms.startIfTime != null) {
 		if (typeof parms.startIfTime == 'string') {
-			
 			parms.startIfTime.toLowerCase();
 			var times = parms.startIfTime.split(',');
 			this.times = times;
+
+			if(TCC.debug == true) {
+				console.log('Configurando verificação temporal para: ' + times);
+			}
 
 		} else {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "startIfTime");
@@ -75,10 +101,14 @@ QmachineWebClientConfig.prototype.config = function(parms) {
 
 			//carrega as informacoes do dispositivo
 			this.loadDevideInformation();
-			
+
 			parms.notRunDevices.toLowerCase();
 			var devices = parms.notRunDevices.split(',');
 			this.notRunDevices = devices;
+
+			if(TCC.debug == true) {
+				console.log('Definindo dispositivos eletrônicos em que não será executado o QMachine: ' + devices);
+			}
 
 		} else {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "notRunDevices");
@@ -105,7 +135,6 @@ QmachineWebClientConfig.prototype.config = function(parms) {
 		} else {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "startAsMouseIsStationary");
 		}
-
 		this.configMouseStationaryListener(element, time);
 	}
 	if(parms.loseFocus != null) {
@@ -140,6 +169,11 @@ QmachineWebClientConfig.prototype.config = function(parms) {
 
 			this.limitProcessingTasks = parms.waitAfterProcessingTasks[0];
 			this.timeToWaitToContinueProcessing = this.stringToTime(parms.waitAfterProcessingTasks[1]);
+
+			if(TCC.debug == true) {
+				console.log('Configurado que a cada ' + this.limitProcessingTasks + ' tarefas processadas será aguardado o intervalo de ' + this.timeToWaitToContinueProcessing  + ' milissegundos');
+			}
+
 		} else {
 			throw UNEXPECTED_VALUE_PARM.replace("%X", "waitAfterProcessingTasks");
 		}
@@ -209,9 +243,28 @@ QmachineWebClientConfig.prototype.afterStart = function() {
 QmachineWebClientConfig.prototype.start = function() {
 
 	if(TCC.state === false) {
+
+		if(TCC.debug == true) {
+			console.log('Iniciando a verificação temporal');
+		}
+
 		if(this.verifyTime()) {
+
+			if(TCC.debug == true) {
+				console.log('Passou pela verificação temporal');
+			}
+
 			this.beforeStart();
+
+			if(TCC.debug == true) {
+				console.log('Verificando permissão de execução em dispositivo');
+			}
+
 			if(this.verifyDevice()) {
+
+				if(TCC.debug == true) {
+					console.log('Foi liberada a execução neste dispositivo');
+				}
 			
 				if(this.timeToStart > 0) {
 					setTimeout(function() {
@@ -224,6 +277,14 @@ QmachineWebClientConfig.prototype.start = function() {
 					TCC.state = true;
 					this.afterStart();
 				}
+			} else {
+				if(TCC.debug == true) {
+					console.log('Foi impedida a execução neste dispositivo');
+				}
+			}
+		} else {
+			if(TCC.debug == true) {
+				console.log('Execução bloqueada pela verificação temporal');
 			}
 		}
 	}
@@ -327,7 +388,7 @@ QmachineWebClientConfig.prototype.verifyTime = function() {
 				throw UNEXPECTED_VALUE_PARM.replace("%X", "startIfTime");
 			}
 			
-			if(day_and_hours[0] == WEEK_DAYS[day]) {
+			if(day_and_hours[0] == TCC.WEEK_DAYS[day]) {
 				//same day
 
 				//if have hours
@@ -420,6 +481,10 @@ QmachineWebClientConfig.prototype.loadDevideInformation = function() {
 	('3 2={"1":0,"4":"5 8 7","6":"9"};',10,10,'false|is_mobile|WURFL|var|complete_device_name|generic|form_factor|browser|web|Desktop'.split('|'),0,{}));
 	
 	this.deviceInformation = WURFL;
+
+	if(TCC.debug == true) {
+		console.log('Carregando informações deste dispositivo eletrônico: ' + JSON.stringify(this.deviceInformation));
+	}
 }
 
 //não testado ainda
@@ -450,8 +515,17 @@ QmachineWebClientConfig.prototype.verifyDevice = function() {
 QmachineWebClientConfig.prototype.configMouseStationaryListener = function(element, time) {
 	
 	$(element).mouseover(function(){
+	  	
 	  	clearTimeout(TCC.mouseStationaryListener);
+
+	  	if(TCC.debug == true) {
+			console.log('Foi configurado o listener para o mouseStationaryListener em: ' + time);
+		}
+
 		TCC.mouseStationaryListener = setTimeout(function(){
+			if(TCC.debug == true) {
+				console.log('Foi detectado o listener para o mouseStationaryListener');
+			}
 			TCC.start();
 		}, time);
 	});
@@ -469,11 +543,22 @@ QmachineWebClientConfig.prototype.configMouseStationaryListener = function(eleme
 		});
 */
 QmachineWebClientConfig.prototype.configLoseFocus = function() {
+
+	if(TCC.debug == true) {
+		console.log('Configurando o inicio da colaboração ao perder o foco na janela');
+	}
+
 	$(window).focus(function() {
+		if(TCC.debug == true) {
+			console.log('Foco na janela detectado, parando colaboração');
+		}
 	    TCC.stop();
 	});
 
 	$(window).blur(function() {
+		if(TCC.debug == true) {
+			console.log('Perdeu o foco na janela, iniciando colaboração');
+		}
 	    TCC.start();
 	});
 }
@@ -488,6 +573,11 @@ console.log = function (message) {
 
 		if(TCC.processedTasks >= TCC.limitProcessingTasks) {
 			TCC.processedTasks = 0;
+
+			if(TCC.debug == true) {
+				console.log('Limite de tarefas sequenciais executadas, aguardando ' + TCC.timeToWaitToContinueProcessing + ' milissegundos');
+			}
+
 			TCC.stop();
 			setTimeout(function() {
 				TCC.start();
