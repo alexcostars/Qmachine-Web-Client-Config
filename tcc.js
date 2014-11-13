@@ -582,8 +582,21 @@ QmachineWebClientConfig.prototype.configLoseFocus = function() {
 var oldLog = console.log;
 console.log = function (message) {
 
+	var identificada_saida_do_qm = false;
+
+	if(message.substring(0, 17) == "Nothing to do ...") {
+		identificada_saida_do_qm = true;
+		TCC.runAfterNothingToDoMessage();
+	}
+
+	if(message.substring(0, 5) == "Done:") {
+		identificada_saida_do_qm = true;
+		var job_key = message.replace("Done: ", "");
+		TCC.runAfterTaskDone(job_key);
+	}
+
 	//se estiver controlando waitAfterProcessingTasks
-	if(TCC.limitProcessingTasks > 0 && TCC.timeToWaitToContinueProcessing > 0) {
+	if(identificada_saida_do_qm == true && TCC.limitProcessingTasks > 0 && TCC.timeToWaitToContinueProcessing > 0) {
 		TCC.processedTasks++;
 
 		if(TCC.processedTasks >= TCC.limitProcessingTasks) {
@@ -600,15 +613,6 @@ console.log = function (message) {
 		}
 	}
 
-	if(message.substring(0, 17) == "Nothing to do ...") {
-		TCC.runAfterNothingToDoMessage();
-	}
-
-	if(message.substring(0, 5) == "Done:") {
-		var job_key = message.replace("Done: ", "");
-		TCC.runAfterTaskDone(job_key);
-	}
-	
     oldLog.apply(console, arguments);
 };
 
