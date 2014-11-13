@@ -7,7 +7,6 @@ function QmachineWebClientConfig() {
 
 	var UNEXPECTED_VALUE_PARM = "TCC: Unexpected value for the parameter %X. See the documentation";
 	var QMACHINE_IS_MISSING = "Qmachine is missing";
-	var WEEK_DAYS = ['sun', 'mon', 'tue', 'wed', 'Thu', 'fri', 'sat'];
 	var times, timeToStart, notRunDevices, deviceInformation, mouseStationaryListener, state, limitProcessingTasks, timeToWaitToContinueProcessing, processedTasks, toolbar_qm_is_visible, collaboration_speed_user_interface, debug;
 
 
@@ -348,7 +347,8 @@ QmachineWebClientConfig.prototype.verifyTime = function() {
 	var date = new Date();
 	var day = date.getDay();
 	var hours = date.getHours();
-
+	var WEEK_DAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+	
 	if(this.times.length > 0) {
 
 		if(TCC.debug == true) {
@@ -364,7 +364,8 @@ QmachineWebClientConfig.prototype.verifyTime = function() {
 				throw UNEXPECTED_VALUE_PARM.replace("%X", "startIfTime");
 			}
 			
-			if(day_and_hours[0] == TCC.WEEK_DAYS[day]) {
+
+			if(day_and_hours[0] == WEEK_DAYS[day]) {
 				//same day
 
 				//if have hours
