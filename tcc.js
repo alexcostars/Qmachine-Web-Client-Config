@@ -243,29 +243,9 @@ QmachineWebClientConfig.prototype.afterStart = function() {
 QmachineWebClientConfig.prototype.start = function() {
 
 	if(TCC.state === false) {
-
-		if(TCC.debug == true) {
-			console.log('Iniciando a verificação temporal');
-		}
-
 		if(this.verifyTime()) {
-
-			if(TCC.debug == true) {
-				console.log('Passou pela verificação temporal');
-			}
-
 			this.beforeStart();
-
-			if(TCC.debug == true) {
-				console.log('Verificando permissão de execução em dispositivo');
-			}
-
 			if(this.verifyDevice()) {
-
-				if(TCC.debug == true) {
-					console.log('Foi liberada a execução neste dispositivo');
-				}
-			
 				if(this.timeToStart > 0) {
 					setTimeout(function() {
 						QM.start();
@@ -277,14 +257,6 @@ QmachineWebClientConfig.prototype.start = function() {
 					TCC.state = true;
 					this.afterStart();
 				}
-			} else {
-				if(TCC.debug == true) {
-					console.log('Foi impedida a execução neste dispositivo');
-				}
-			}
-		} else {
-			if(TCC.debug == true) {
-				console.log('Execução bloqueada pela verificação temporal');
 			}
 		}
 	}
@@ -379,6 +351,10 @@ QmachineWebClientConfig.prototype.verifyTime = function() {
 
 	if(this.times.length > 0) {
 
+		if(TCC.debug == true) {
+			console.log('Iniciando a verificação temporal');
+		}
+
 		for(var i = 0; i < this.times.length; i++) {
 			
 			var day_and_hours = this.times[i].split('(');
@@ -403,6 +379,11 @@ QmachineWebClientConfig.prototype.verifyTime = function() {
 					if( hours_of_day[0] <= hours_of_day[1] && //if user set ex: (5-10)
 						hours >= hours_of_day[0] &&
 						hours <= hours_of_day[1]) {
+
+						if(TCC.debug == true) {
+							console.log('Liberando a colaboração pela verificação temporal');
+						}
+
 						return true;
 					}
 					if( hours_of_day[0] > hours_of_day[1] && //if user set ex: (11-5)
@@ -411,16 +392,35 @@ QmachineWebClientConfig.prototype.verifyTime = function() {
 							(hours <= hours_of_day[0] && hours <= hours_of_day[1])
 						)
 					) {
+						
+						if(TCC.debug == true) {
+							console.log('Liberando a colaboração pela verificação temporal');
+						}
+						
 						return true;
 					}
 					
 				} else {
+
+					if(TCC.debug == true) {
+						console.log('Liberando a colaboração pela verificação temporal');
+					}
+					
 					return true;
 				}
-				return false;
+
+				if(TCC.debug == true) {
+					console.log('Colaboração não liberada devido a não passar em teste de verificação temporal');
+				}
 				
+				return false;
 			}
 		}
+		
+		if(TCC.debug == true) {
+			console.log('Colaboração não liberada devido a não passar em teste de verificação temporal');
+		}
+
 		return false;
 	} else {
 		return true;
@@ -487,13 +487,27 @@ QmachineWebClientConfig.prototype.loadDevideInformation = function() {
 	}
 }
 
-//não testado ainda
 QmachineWebClientConfig.prototype.verifyDevice = function() {
 	for(var cont = 0; cont < this.notRunDevices.length; cont++) {
+
+		if(cont == 0 && TCC.debug == true) {
+			console.log('Verificando permissão de execução neste dispositivo');
+		}
+
 		if(this.deviceInformation.form_factor.toLowerCase() == this.notRunDevices[cont].toLowerCase()) {
+			
+			if(cont == 0 && TCC.debug == true) {
+				console.log('Colaboração não permitida devido a dispositivo não ter permissão para colaborar');
+			}
+
 			return false;
 		}
 	}
+
+	if(this.notRunDevices.length > 0 && TCC.debug == true) {
+		console.log('Liberada a colaboração neste dispositivo');
+	}
+
 	return true;
 }
 
