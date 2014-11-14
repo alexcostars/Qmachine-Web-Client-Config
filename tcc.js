@@ -358,13 +358,15 @@ QmachineWebClientConfig.prototype.verifyTime = function() {
 		for(var i = 0; i < this.times.length; i++) {
 			
 			var day_and_hours = this.times[i].split('(');
+			day_and_hours[0] = day_and_hours[0].toLowerCase();
+			day_and_hours[0] = day_and_hours[0].replace(' ', '');
+			day_and_hours[1] = day_and_hours[1].replace(' ', '');
 
 			//se no replace de Mon(4) tiver mais de 2 informações ({Mon, 4}) gerará erro pois não é esperado
 			if(day_and_hours.length > 2) {
 				throw UNEXPECTED_VALUE_PARM.replace("%X", "startIfTime");
 			}
 			
-
 			if(day_and_hours[0] == WEEK_DAYS[day]) {
 				//same day
 
@@ -411,7 +413,7 @@ QmachineWebClientConfig.prototype.verifyTime = function() {
 				}
 
 				if(TCC.debug == true) {
-					console.log('Colaboração não liberada devido a não passar em teste de verificação temporal');
+					console.log('1Colaboração não liberada devido a não passar em teste de verificação temporal (data/hora atual: ' + new Date().getDate() + "/" + new Date().getMonth() + "/" + new Date().getFullYear() + ' ' + new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds() + ')');
 				}
 				
 				return false;
@@ -419,7 +421,7 @@ QmachineWebClientConfig.prototype.verifyTime = function() {
 		}
 		
 		if(TCC.debug == true) {
-			console.log('Colaboração não liberada devido a não passar em teste de verificação temporal');
+			console.log('2Colaboração não liberada devido a não passar em teste de verificação temporal (data/hora atual: ' + new Date().getDate() + "/" + new Date().getMonth() + "/" + new Date().getFullYear() + ' ' + new Date().getHours() + ':' + new Date().getMinutes() + ':' + new Date().getSeconds() + ')');
 		}
 
 		return false;
