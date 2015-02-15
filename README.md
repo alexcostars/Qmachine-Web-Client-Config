@@ -1,12 +1,12 @@
-# Web Client Config
+# Qmachine Web Client Config
 
-## Instalação
+## Installation
 
-Inicialmente inclua em seu site:
+Initially include on your site:
 ``` HTML
 <script src="tcc.js"></script>
 ```
-E construa um objeto do tipo TCC
+And build a TCC object
 
 ``` javascript
 <script type="text/javascript">
@@ -20,19 +20,19 @@ E construa um objeto do tipo TCC
 </script>
 ```
 ## start
-Descrição: Inicia o processo de colaboração
+Description: Starts the process of collaboration
 
 ``` javascript
 TCC.start();
 ```
 ## stop
-Descrição: Interrompe o processo de colaboração
+Description: Stops the collaborative process
 
 ``` javascript
 TCC.stop();
 ```
 ## beforeStart
-Descrição: Execute uma função antes do processo de colaboração ser iniciado
+Description: Perform a function before the collaboration process begins
 
 Value type: ```function```
 
@@ -44,7 +44,7 @@ TCC.config({
 });
 ```
 ## afterStart
-Descrição: Execute uma função após o processo de colaboração ser iniciado
+Description: Perform a function after the collaboration process begins
 
 Value type: ```function```
 
@@ -57,7 +57,7 @@ TCC.config({
 ```
 
 ## beforeStop
-Descrição: Execute uma função antes do processo de colaboração ser interrompido
+Description: Perform a function before the collaborative process be stopped
 
 Value type: ```function```
 
@@ -70,7 +70,7 @@ TCC.config({
 ```
 
 ## afterStop
-Descrição: Execute uma função após do processo de colaboração ser interrompido
+Description: Perform a function after the collaborative process be stopped
 
 Value type: ```function```
 
@@ -82,7 +82,7 @@ TCC.config({
 });
 ```
 ## startIfTime
-Descrição: Defina em que dias/horas o processo de colaboração poderá ser iniciado
+Description: Set in the days / hours the collaboration process can be started
 
 Value type: ```string```
 
@@ -99,7 +99,7 @@ TCC.config({
 });
 ```
 ## timeToStart
-Descrição: Defina um período de tempo que deve ser aguardado antes de iniciar o processo de colaboração
+Description: Set a period of time to wait before starting the process of collaboration
 
 Value type: ```string``` or ```numeric```
 
@@ -116,7 +116,7 @@ TCC.config({
 });
 ```
 ## notRunDevices
-Descrição: Defina em quais dispositivos o middleware não deverá ser executado
+Description: Set in which devices the middleware should not be played
 
 Value type: ```string```
 
@@ -131,7 +131,7 @@ TCC.config({
 ```
 
 ## startAsMouseIsStationary
-Descrição: Iniciará quando o cursor do mouse não apresentar movimento sobre a página acessada
+Description: It starts when the mouse cursor does not show movement on the accessed page
 
 Value type: ```string``` ou ```numeric```
 
@@ -149,7 +149,7 @@ TCC.config({
 
 ```
 ## loseFocus
-Descrição: Iniciará quando o usuário não estiver com a aba da página ativa (estiver minimizada ou visualizado outra aba do browser)
+Description: It starts when the user is not on the active tab page (is minimized or viewed another browser tab)
 
 Value type: ```boolean```
 
@@ -162,7 +162,7 @@ TCC.config({
 ```
 
 ## autoStart
-Descrição: Define que o middleware será iniciado automaticamente após o carregamento da página
+Description: Sets the middleware will start automatically after the page loading
 
 Value type: ```boolean```
 
@@ -174,7 +174,7 @@ TCC.config({
 });
 ```
 ## runAfterNothingToDoMessage
-Descrição: Execute uma função após não encontrar nenhuma tarefa para ser processada
+Description: Perform a function after not find any job to be processed
 
 Value type: ```function```
 
@@ -186,7 +186,7 @@ TCC.config({
 });
 ```
 ## runAfterTaskDone
-Descrição: Execute uma função após terminar de processar uma tarefa
+Description: Perform a function after you have processed a task
 
 Value type: ```function```
 
@@ -198,7 +198,7 @@ TCC.config({
 });
 ```
 ## waitAfterProcessingTasks
-Descrição: Defina um período de tempo que deve ser aguardado após processar X tarefas para que o processo voluntário continue
+Description: Set a period of time that must wait after X process tasks for the volunteer process to continue
 
 Value type: ```array[numeric, numeric/string]```
 
@@ -217,7 +217,7 @@ TCC.config({
 });
 ```
 ## allowUserInterface
-Descrição: Defina se será mostrada ao usuário uma Interface de Manipulação do projeto TCC
+Description: Set up will be shown to the user a TCC project Manipulation Interface
 
 Value type: ```boolean```
 
